@@ -58,13 +58,16 @@ Validate the Leave Request. Depending on the current `state` and the validators 
 * Employee has two validators and `state` is `Re` : only the first validator can validate, Leave Request `state` becomes `V1`.
 * Employee has two validators and `state` is `V1` : only the second validator can validate, Leave Request is validated (`state` becomes `Va`).
 
++ Request
+    + Attributes (Comment, optional)
+
 + Response 200 (application/json)
     + Attributes (Leave Request)
 
 + Response 403 (application/json)
     Happens when the user doesn't have the rights to validate the Leave Request:
-    * An Employee can't validate its own request (**even if they are admin**)
-    * First validator while `state` is `V1`
+    * An Employee can't validate its own request (**even if they are admin**).
+    * First validator while `state` is `V1`.
     + Attributes (object)
         + detail: `Nice try but no, you can't validate your own request 😜` (string) - Status message.
 
@@ -74,15 +77,32 @@ Deny the Leave Request. Depending on the current `state` and the validators of t
 * Employee has two validators and `state` is `Re` : only the first validator can deny, Leave Request is denied (`state` becomes `Rf`).
 * Employee has two validators and `state` is `V1` : only the second validator can deny, Leave Request is denied (`state` becomes `Rf`).
 
++ Request
+    + Attributes (Comment, optional)
+
 + Response 200 (application/json)
     + Attributes (Leave Request)
 
 + Response 403 (application/json)
     Happens when the user doesn't have the rights to deny the Leave Request:
-    * An Employee can't deny its own request (**even if they are admin**)
-    * First validator while `state` is `V1`
+    * An Employee can't deny its own request (**even if they are admin**).
+    * First validator while `state` is `V1`.
     + Attributes (object)
         + detail: `Nice try but no, you can't validate your own request 😜` (string) - Status message.
+
+### Comment a Leave Request [PATCH /leaverequests/{id}/comment/]
+Add a comment to the Leave Request.
+
++ Request
+    + Attributes (Comment, required)
+
++ Response 200 (application/json)
+    + Attributes (Leave Request)
+
++ Response 403 (application/json)
+    Happens when the user doesn't have the rights to comment the Leave Request: neither the Employee, one of the validator of the Employee, nor an admin.
+    + Attributes (object)
+        + detail: `You can't comment this request.` (string) - Status message.
 
 # Data structures
 
@@ -119,3 +139,7 @@ Deny the Leave Request. Depending on the current `state` and the validators of t
         + author: 42 (number) - Id of the User author of this comment.
         + addDate: `2017-06-02T13:37:00Z` (string) - Creation date of the comment.
         + text: `Know where your towel is.` (string) - Text of the comment.
+
+## Comment (object)
+
++ comment: `Know where your towel is.` (string) - Text of the comment.
