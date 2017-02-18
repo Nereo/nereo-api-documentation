@@ -6,6 +6,8 @@ Nereo API let's you integrate leaves management into your internal processes or 
 
 > At the moment, only leave requests can be created and edited. The other endpoints are read-only, but they will come later.
 
+**[Subscribe to our newsletter to be kept informed of the evolutions of the API](https://app.mailjet.com/widget/iframe/25Ry/2xV)**
+
 ## Authentication
 To authenticate through the API, you will need a token that you have to provide in the `Authorization` header of your request, prefixed by the keyword `Token`. For example:
 
@@ -22,7 +24,7 @@ Authorization: Token MyRandomToken
 # Group Leave Requests
 Leave requests are at the heart of the Nereo system: they represent an absence of an employee.
 
-## Leave Request [/leaverequests/{id}]
+## Leave Request [/leaverequests/{id}/]
 
 + Parameters
     + id: 1 (number) - The ID of the Leave Request.
@@ -32,6 +34,55 @@ Retrieve the Leave Request with the given ID.
 
 + Response 200 (application/json)
     + Attributes (Leave Request)
+    
+### Cancel a Leave Request [DELETE]
+Delete the Leave Request if it has not been validated yet (`state` is `Re`) **or** create a cancellation Leave Request otherwise.
+
+The cancellation Leave Request behaves then just as a regular Leave Request and has to go through the whole validation process.
+
++ Response 200 (application/json)
+    The Leave Request was not validated yet (`state` is `Re`): it's definitely removed.
+    + Attributes (object)
+        + detail: `Leave request cancelled` - Status message.
+
++ Response 201 (application/json)
+    The Leave Request was validated (`state` is `V1` or `Va`): a cancellation Leave Request is created.
+    + Attributes (object)
+        + cancellationLeaveRequestId: 10 (number) - ID of the cancellation Leave Request.
+        + detail: `A cancellation request has been created.` (string) - Status message.
+        + validated: false (boolean) - Whether or not the cancellation request has automatically been validated. Happens when the cancellation is requested by an administrator or one of the validators of the Employee. 
+
+### Validate a Leave Request [PATCH /leaverequests/{id}/validate/]
+Validate the Leave Request. Depending on the current `state` and the validators of the Employee, several cases could happen:
+* Employee has only one validator and `state` is `Re` : Leave Request is validated (`state` becomes `Va`).
+* Employee has two validators and `state` is `Re` : only the first validator can validate, Leave Request `state` becomes `V1`.
+* Employee has two validators and `state` is `V1` : only the second validator can validate, Leave Request is validated (`state` becomes `Va`).
+
++ Response 200 (application/json)
+    + Attributes (Leave Request)
+
++ Response 403 (application/json)
+    Happens when the user doesn't have the rights to validate the Leave Request:
+    * An Employee can't validate its own request (**even if they are admin**)
+    * First validator while `state` is `V1`
+    + Attributes (object)
+        + detail: `Nice try but no, you can't validate your own request 😜` (string) - Status message.
+
+### Deny a Leave Request [PATCH /leaverequests/{id}/deny/]
+Deny the Leave Request. Depending on the current `state` and the validators of the Employee, several cases could happen:
+* Employee has only one validator and `state` is `Re` : Leave Request is denied (`state` becomes `Rf`).
+* Employee has two validators and `state` is `Re` : only the first validator can deny, Leave Request is denied (`state` becomes `Rf`).
+* Employee has two validators and `state` is `V1` : only the second validator can deny, Leave Request is denied (`state` becomes `Rf`).
+
++ Response 200 (application/json)
+    + Attributes (Leave Request)
+
++ Response 403 (application/json)
+    Happens when the user doesn't have the rights to deny the Leave Request:
+    * An Employee can't deny its own request (**even if they are admin**)
+    * First validator while `state` is `V1`
+    + Attributes (object)
+        + detail: `Nice try but no, you can't validate your own request 😜` (string) - Status message.
 
 # Data structures
 
@@ -39,7 +90,7 @@ Retrieve the Leave Request with the given ID.
 
 + id: 1 (number)
 + addDate: `2017-06-02T13:37:00Z` (string) - Creation date of the Leave Request.
-+ user: 1 (number) - ID of the User concerned by the Leave Request.
++ user: 1 (number) - ID of the User concerned by the Leave Request, the Employee.
 + state: Re (enum) - Validation state of the Leave Request.
     + Re (string) - The Leave Request is requested.
     + V1 (string) - The Leave Request is validated by the first validator.
@@ -59,7 +110,7 @@ Retrieve the Leave Request with the given ID.
             + am (string) - Morning only
             + pm (string) - Afternoon only
         + caw: false (boolean) - Whether or not the date is "considered as work". In French law, this field is here to cope with "jours ouvrables".
-        + distribution (array) - Specifies how the absence for this day is distributed among the absences accounts of the User.
+        + distribution (array) - Specifies how the absence for this day is distributed among the absences accounts of the Employee.
             + (object)
                 + account: 1 (number) - ID of the Timed Account on which this part of the absence is withdrawn.
                 + amount: 1 (number) - Value withdrawn from the `account`.
