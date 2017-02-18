@@ -1,0 +1,60 @@
+FORMAT: 1A
+HOST: https://absences.nereo.com/api
+
+# Nereo API
+Nereo API let's you integrate leaves management into your internal processes or tools. [Save time: automate leaves management with Nereo.](https://nereo.com)
+
+> At the moment, only leave requests can be created and edited. The other endpoints are read-only, but they will come later.
+
+## Authentication
+To authenticate through the API, you will need a token that you have to provide in the `Authorization` header of your request, prefixed by the keyword `Token`. For example:
+
+```
+Authorization: Token MyRandomToken
+```
+
+>    Please note that this token shares the **same rights** as your user account:
+>
+>    * If you're a **administrator**, you'll be able to view, create and edit every objects ;
+>    * If you're a **validator**, you'll be able to view, create and edit your objects and the ones belonging to the persons you validate ;
+>    * If you're a **regular user**, you'll only be able to view, create and edit your own objects.
+
+# Group Leave Requests
+Leave requests are at the heart of the Nereo system: they represent an absence of an employee.
+
+## Leave Request [/leaverequests/{id}{?limit}]
+
++ Parameters
+    + id: 1 (number) - The ID of the Leave Request.
+
+### Retrieve a Leave Request [GET]
+Retrieve the Leave Request with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Leave Request)
+
+# Data structures
+
+## Leave Request (object)
+
++ id: 1 (number)
++ addDate: `2017-06-02T13:37:00Z` (string) - Creation date of the Leave Request.
++ user: 1 (number) - ID of the User concerned by the Leave Request.
++ state: Re (enum) - Validation state of the Leave Request.
+    + Re (string) - The Leave Request is requested.
+    + V1 (string) - The Leave Request is validated by the first validator.
+    + Va (string) - The Leave Request is validated.
+    + Rf (string) - The Leave Request is refused.
+    + Ca (string) - The Leave Request is cancelled.
++ imposed: false (boolean) - Whether or not the Leave Request has been imposed by a validator or an administrator.
++ firstDateKey: `2017-01-01` (string) - First date of the absence in format `YYYY-MM-DD`.
++ lastDateKey: `2017-01-02` (string) - Last date of the absence in format `YYYY-MM-DD`.
++ cancelForLeaveRequest: 10 (number, nullable) - ID of the Leave Request that this Leave Request cancels. `null` if this Leave Request is not a cancellation request.
++ cancellationLeaveRequests: 20, 30, 40 (array[number]) - List of the IDs of the Leave Requests that cancels this Leave request. Empty if this Leave Request has not any cancellation request.
++ leaveRequestDates (array) - Each day concerned by the Leave Request is represented by a Leave Request Date that provides details about the absence on this particular day.
+    + (object)
+        + dateKey: `2017-01-01` (string) - Date in format `YYYY-MM-DD`.
+        + planMark: `all` (enum) - Period of the day on which this Leave Request Date applies.
+            + all (string) - All day
+            + am (string) - Morning only
+            + pm (string) - Afternoon only
