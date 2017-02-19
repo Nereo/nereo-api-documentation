@@ -43,7 +43,7 @@ The cancellation Leave Request behaves then just as a regular Leave Request and 
 + Response 200 (application/json)
     The Leave Request was not validated yet (`state` is `Re`): it's definitely removed.
     + Attributes (object)
-        + detail: `Leave request cancelled` - Status message.
+        + detail: `Leave request cancelled` (string) - Status message.
 
 + Response 201 (application/json)
     The Leave Request was validated (`state` is `V1` or `Va`): a cancellation Leave Request is created.
@@ -103,6 +103,32 @@ Add a comment to the Leave Request.
     Happens when the user doesn't have the rights to comment the Leave Request: neither the Employee, one of the validator of the Employee, nor an admin.
     + Attributes (object)
         + detail: `You can't comment this request.` (string) - Status message.
+
+## Quick Leave Request creation [/leaverequests/quick/]
+Provide an endpoint to create a Leave Request in one call. Only one Timed Account can be provided. If you wish to create a complex Leave Request with several Timed Accounts, refer to the *Complex Leave Request creation* section.
+
+### Create a Leave Request quickly [POST]
+
++ Request
+    + Attributes (object)
+        + user: 1 (number, optional) - ID of the User concerned by the Leave Request, the Employee. *If not provided, the new Leave Request is associated to the current user.*
+        + begin_date: `2017-01-01` (string, required) - First date of the absence in format `YYYY-MM-DD`.
+        + end_date: `2017-01-07` (string, required) - Last date of the absence in format `YYYY-MM-DD`.
+        + `morning_included`: true (boolean, required) - Whether or not the morning of the `begin_date` is included in the absence.
+        + `afternoon_included`: true (boolean, required) - Whether or not the afternoon of the `end_date` is included in the absence.
+        + timed_account: 1 (number, required) - ID of the Timed Account on which withdraw the absence.
+        + Include Comment
+        
++ Response 200
+    + Attributes (Leave Request)
+    
++ Response 400
+    Happens when:
+    * The user doesn't have the rights to create a Leave Request on behalf of the Employee.
+    * The Account associated to the Timed Account provided is `hidden` and the user is not an admin.
+    + There are blocking errors preventing this Leave Request to be created (negative balance, consumption constraint not fulfilled, Employee already absent...)
+    + Attributes (object)
+        + detail: `Impossible request` (string) - Status message.
 
 # Data structures
 
