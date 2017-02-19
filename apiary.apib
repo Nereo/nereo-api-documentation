@@ -104,6 +104,26 @@ Add a comment to the Leave Request.
     + Attributes (object)
         + detail: `You can't comment this request.` (string) - Status message.
 
+## Leave Requests Collection [/leaverequests/{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}]
+
++ Parameters
+    + user: 1 (number, optional) - ID of the User concerned by the Leave Request.
+    + min_date: `2017-01-01` (string, optional) - Filter the Leave Requests *from* this date.
+    + max_date: `2017-01-07` (string, optional) - Filter the Leave Requests *until* this date.
+    + state: Re (string, optional) - Filter the Leave Requests at this `state`.
+    + `is_cancellation_request`: false (boolean, optional) - Filter the Leave Requests that are cancellation Leave Requests of others.
+
+### Retrieve all Leave Requests [GET]
+Retrieve all Leave Requests that the user can review:
+* All if the user is admin.
+* It's own and the ones of the Employees the user validates.
+* Only it's own otherwise.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Leave Request]) - Array of results.
+
 ## Create a simple Leave Request [/leaverequests/quick/]
 Provide an endpoint to create a Leave Request in one call. Only one Timed Account can be provided. If you wish to create a complex Leave Request with several Timed Accounts, refer to the *Create a complex Leave Request* section.
 
@@ -167,6 +187,12 @@ account has to be provided.
     + Attributes (Leave Request)
 
 # Data structures
+
+## Pagination (object)
+
++ count: 100 (number) - Total number of results.
++ next: null (string, nullable) - URL of the next page of results.
++ previous: null (string, nullable) - URL of the previous page of results.
 
 ## Leave Request (object)
 
