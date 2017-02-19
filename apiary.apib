@@ -104,20 +104,15 @@ Add a comment to the Leave Request.
     + Attributes (object)
         + detail: `You can't comment this request.` (string) - Status message.
 
-## Quick Leave Request creation [/leaverequests/quick/]
-Provide an endpoint to create a Leave Request in one call. Only one Timed Account can be provided. If you wish to create a complex Leave Request with several Timed Accounts, refer to the *Complex Leave Request creation* section.
+## Create a simple Leave Request [/leaverequests/quick/]
+Provide an endpoint to create a Leave Request in one call. Only one Timed Account can be provided. If you wish to create a complex Leave Request with several Timed Accounts, refer to the *Create a complex Leave Request* section.
 
-### Create a Leave Request quickly [POST]
+### Create a simple Leave Request [POST]
 
 + Request
     + Attributes (object)
-        + user: 1 (number, optional) - ID of the User concerned by the Leave Request, the Employee. *If not provided, the new Leave Request is associated to the current user.*
-        + begin_date: `2017-01-01` (string, required) - First date of the absence in format `YYYY-MM-DD`.
-        + end_date: `2017-01-07` (string, required) - Last date of the absence in format `YYYY-MM-DD`.
-        + `morning_included`: true (boolean, required) - Whether or not the morning of the `begin_date` is included in the absence.
-        + `afternoon_included`: true (boolean, required) - Whether or not the afternoon of the `end_date` is included in the absence.
+        + Include Leave Request Creation Base
         + timed_account: 1 (number, required) - ID of the Timed Account on which withdraw the absence.
-        + Include Comment
         
 + Response 200
     + Attributes (Leave Request)
@@ -129,6 +124,47 @@ Provide an endpoint to create a Leave Request in one call. Only one Timed Accoun
     + There are blocking errors preventing this Leave Request to be created (negative balance, consumption constraint not fulfilled, Employee already absent...)
     + Attributes (object)
         + detail: `Impossible request` (string) - Status message.
+        
+## Create a complex Leave Request [/leaverequests/]
+Provide an endpoint to create a complex Leave Request, providing several Timed Account distributed among the days of the absence.
+
+Before doing that, it's **necessary to make a call to an endpoint that will provide groups of accounts**.
+
+### Get groups of accounts [POST /leaverequests/accounts-groups/]
+Indeed, given the account type ("jours ouvrés" or "jours ouvrables" in French law), a same day may not weigh the
+same from one account to another. Let's take an example: an Employee works usually from **Monday to Friday** and want to **book an absence** from **Friday** to the **next Monday**. Three main cases could happen:
+* Account is in "jours ouvrables", and no absence have been booked before: this absence will weigh **2 days** ; Saturday is considered as worked.
+* Account is in "jours ouvrés": this absence will weigh **1 day** ; only Friday counts.
+* Account is in "jours ouvrables", but already **5 Saturdays** have been counted on other absences: this absence will weigh **1 day** ; this limit of five is here to prevent the Employee from being wronged if they only book absence across two weeks.
+
+That's why we need an endpoint that provide groups of accounts that will weigh the same for the same absence.
+**It's not possible to distribute an absence on accounts that not behave the same.**
+
++ Request
+    + Attributes (object)
+        + user: 1 (number, optional) - ID of the User concerned by the Leave Request, the Employee. *If not provided, the new Leave Request is associated to the current user.*
+        + begin_date: `2017-01-01` (string, required) - First date of the absence in format `YYYY-MM-DD`.
+        + end_date: `2017-01-07` (string, required) - Last date of the absence in format `YYYY-MM-DD`.
+        
++ Response 200
+    + Attributes (array)
+        + (object)
+            + groupKey: adjGrp0 (string) - ID of the accounts group. *Needed later for the creation of the Leave Request*
+            + nb_days: 7 (number) - Number of days counted by this absence for these accounts.
+            + timed_accounts: 1, 2, 3 (array[number]) - List of IDs of the Timed Accounts in this group.
+            
+### Create a complex Leave Request [POST]
+Once the accounts group is selected, a distribution array specifying how the absence is distributed accross all days for each
+account has to be provided.
+
+> UNDOCUMENTED YET - SUBJECT TO CHANGES
+
++ Request
+    + Attributes (object)
+        + Include Leave Request Creation Base
+
++ Response 200
+    + Attributes (Leave Request)
 
 # Data structures
 
@@ -169,3 +205,12 @@ Provide an endpoint to create a Leave Request in one call. Only one Timed Accoun
 ## Comment (object)
 
 + comment: `Know where your towel is.` (string) - Text of the comment.
+
+## Leave Request Creation Base (object)
+
++ user: 1 (number, optional) - ID of the User concerned by the Leave Request, the Employee. *If not provided, the new Leave Request is associated to the current user.*
++ begin_date: `2017-01-01` (string, required) - First date of the absence in format `YYYY-MM-DD`.
++ end_date: `2017-01-07` (string, required) - Last date of the absence in format `YYYY-MM-DD`.
++ `morning_included`: true (boolean, required) - Whether or not the morning of the `begin_date` is included in the absence.
++ `afternoon_included`: true (boolean, required) - Whether or not the afternoon of the `end_date` is included in the absence.
++ Include Comment
