@@ -6,4 +6,4 @@ This is the source of the Nereo API documentation, written in [API Blueprint for
 
 ## [Read the documentation](http://docs.nereo.apiary.io/)
 
-## [Subscribe to Nereo developers newsletter](https://app.mailjet.com/widget/iframe/25Ry/2xV)
+## [Subscribe to Nereo API newsletter](https://app.mailjet.com/widget/iframe/25Ry/2xV)
