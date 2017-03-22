@@ -109,7 +109,7 @@ Add a comment to the Leave Request.
     + Attributes (object)
         + detail: `You can't comment this request.` (string) - Status message.
 
-## Leave Requests Collection [/leaverequests/{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}]
+## Leave Requests Collection [/leaverequests/{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}{?has_cancellation_request_pending}{?to_validate}]
 
 + Parameters
     + user: 1 (number, optional) - ID of the User concerned by the Leave Request.
@@ -117,6 +117,8 @@ Add a comment to the Leave Request.
     + max_date: `2017-01-07` (string, optional) - Filter the Leave Requests *until* this date.
     + state: Re (string, optional) - Filter the Leave Requests at this `state`.
     + `is_cancellation_request`: false (boolean, optional) - Filter the Leave Requests that are cancellation Leave Requests of others.
+    + `has_cancellation_request_pending`: false (boolean, optional) - Filter the Leave Requests that have cancellation Leave Requests pending validation.
+    + `to_validate`: false (boolean, optional) - Filter the Leave Requests that the current user has to validate (cancellation Leave Requests included).
 
 ### Retrieve all Leave Requests [GET]
 Retrieve all Leave Requests that the user can review:
@@ -198,12 +200,44 @@ Users represent the employees of the company managing their leave on Nereo.
 
 + Parameters
     + id: 1 (number) - The ID of the User.
-
+    
 ### Retrieve a User [GET]
 Retrieve the User with the given ID.
 
 + Response 200 (application/json)
     + Attributes (User)
+    
+### Get the balances of a User [POST /leaverequests/{id}/balances/]
+Get the balances of *each* absences types of a User for *each* day between two dates.
+
++ Request
+    + Attributes (object)
+        + begin_date: `2017-01-01` (string, required) - First date to retrieve in format `YYYY-MM-DD`.
+        + end_date: `2017-01-07` (string, required) - Last date to retrieve in format `YYYY-MM-DD`.
+        
++ Response 200 (application/json)
+    + Attributes (array)
+        + (object)
+            + accountKey: `ta_123` (string) - Key of the Timed Account (NOT the ID) **IMPROVEMENT NEEDED**
+            + balances (array)
+                + (object)
+                    + date: `2017-01-01`(string) - Date of the balance in format `YYYY-MM-DD`.
+                    + value: 2.08 (number) - Balance of the Timed Account for this User at `date`.
+    
+## Users Collection [/users/{?disabled}{?validated}]
+
++ Parameters
+    + disabled: false (boolean, optional) - Filter the Users that are disabled, i.e. `endDate` is not null and is older that seven days ago.
+    + validated: false (boolean, optional) - Filter the Users that the user validates.
+    
+### Retrieve all Users [GET]
+Retrieve all the Users.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[User]) - Array of results.
+
 
 # Data structures
 
@@ -289,3 +323,20 @@ Retrieve the User with the given ID.
 + calendarProfile: 1 (number) - ID of the Calendar Profile.
 + startDate: `2016-01-01` (string) - Date from which this Calendar Profile is applied.
 + endDate: `2016-12-31` (string) - Date until which this Calendar Profile is applied.
+
+## Calendar Profile (object)
+
++ id: 1 (number)
++ title: Full-time (string) - Title for this Calendar Profile
++ calendars: 1, 2, 3, 4 (array[number]) - List of IDs of Calendar Layers associated to this Calendar Profile.
+
+## Calendar Layer (object)
+
++ id: 1 (number)
++ title: Week-ends (string) - Title for this Calendar Layer
++ calendarFeeder (string) - JavaScript function that resolves internally to days-off.
++ editor WE (enum) - Calendar editor type to show in the interface.
+    + WE (string) - Week
+    + MO (string) - Month
+    + YR (string) - Year
+    + SC (string) - Script
