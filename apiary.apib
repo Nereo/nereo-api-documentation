@@ -86,7 +86,7 @@ Retrieve the Account with the given ID.
 + Response 200 (application/json)
     + Attributes (Account)
        
-## Account Collection [/accounts/{?hidden}]
+## Accounts Collection [/accounts/{?hidden}]
 
 + Parameters
     + hidden: false (boolean, optional) - Filter the Accounts hidden to the employees.
@@ -100,7 +100,7 @@ Retrieve all the Accounts.
         + results (array[Account]) - Array of results.
 
 
-# Group Timed Accountd
+# Group Timed Accounts
 Accounts are not used alone. Each one is associated to one or several Timed Accounts which are absences associated to a period of accrual (when Nereo credits the account) and a period of consumption (when the employee is allowed to book leave on this account).
 
 ## Timed Account [/timed-accounts/{id}/]
@@ -114,7 +114,7 @@ Retrieve the Timed Account with the given ID.
 + Response 200 (application/json)
     + Attributes (Timed Account)
        
-## Timed Account Collection [/timed-accounts/{?account}{?user}{?closed}{?hidden}]
+## Timed Accounts Collection [/timed-accounts/{?account}{?user}{?closed}{?hidden}]
 
 + Parameters
     + account: 1 (number, optional) - Filter the Timed Accounts associated to this Account ID.
@@ -129,6 +129,48 @@ Retrieve all the Timed Accounts.
     + Attributes (object)
         + Include Pagination
         + results (array[Timed Account]) - Array of results.
+
+
+# Group Flows
+Flows represent an entry in a Timed Account for a particular User.
+
+## Flow [/flows/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the Flow.
+
+### Retrieve a Flow [GET]
+Retrieve the Flow with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Flow)
+       
+## Flows Collection [/flows/{?min_date}{?max_date}{?user}{?timed_account}]
+
++ Parameters
+    + min_date: `2017-01-01` (string, optional) - Filter the Flows *from* this date (on `accountDate`).
+    + max_date: `2017-01-30` (string, optional) - Filter the Flows *until* this date (on `accountDate`).
+    + user: 1 (number, optional) - Filter the Flows of the User associated to this ID.
+    + timed_account: 1 (number, optional) - Filter the Flows of the Timed Account associated to this ID.
+
+### Retrieve all Flows [GET]
+Retrieve all the Flows.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Flow]) - Array of results.
+
+### Get estimated Flows [POST /flow/estimations/]
+Internally, Nereo executes the accrual rules everyday to compute the new Flows to credit to each account. Before they are actually written, it is possible to get them for a particular User and Timed Account. It could be useful to check if the rule executes correctly.
+
++ Request
+    + Attributes (object)
+        + timed_account: 1 (number, required) - ID of the Timed Account to get the estimations Flows for.
+        + user: 1 (number, required) - ID of the User to get the estimations Flows for.
+        
++ Response 200 (application/json)
+    + Attributes (array[Flow])
 
 
 # Group Leave Requests
@@ -341,6 +383,15 @@ account has to be provided.
     + Oe (string) - Absence is counted in worked days ("jours ouvrés" in French law).
     + Oa (string) - Absence is counted in workable days ("jours ouvrables" in French law).
     + Ca (string) - Absence is counted in calendar days ("jours calendaires" in French law).
+
+## Flow (object)
+
++ id: 1 (number)
++ title: Consumption (string) - Title of the Flow.
++ recordDate: `2016-12-01` (string) - Date on which this Flow is recorded  in format `YYYY-MM-DD`.
++ accountDate: `2017-01-01` (string) - Date on which this Flow is accounted in format `YYYY-MM-DD`.
++ amountCredit: 2.08 (number) - Amount of accrual added to the account. *Could be negative: for example, if a rule credited too much, an adjustment could be made and a Flow with a negative `amountCredit` would be created.*
++ amountDebt: 1 (number) - Amount of absence taken to the account. *Could be negative: for example, if a Leave Request is cancelled, a Flow with a negative `amountDebt` is created.*
 
 ## Leave Request (object)
 
