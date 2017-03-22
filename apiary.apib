@@ -70,7 +70,36 @@ Retrieve all the Users.
     + Attributes (object)
         + Include Pagination
         + results (array[User]) - Array of results.
-        
+
+
+# Group Accounts
+Accounts represent all the absences types available in your company: paid leaves, sick leave, etc.
+
+## Account [/accounts/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the Account.
+
+### Retrieve an Account [GET]
+Retrieve the Account with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Account)
+       
+## Account Collection [/accounts/{?hidden}]
+
++ Parameters
+    + hidden: false (boolean, optional) - Filter the Accounts hidden to the employees.
+
+### Retrieve all Accounts [GET]
+Retrieve all the Accounts.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Account]) - Array of results. 
+
+
 # Group Leave Requests
 Leave requests are at the heart of the Nereo system: they represent an absence of an employee.
 
@@ -245,6 +274,14 @@ account has to be provided.
 + count: 100 (number) - Total number of results.
 + next: null (string, nullable) - URL of the next page of results.
 + previous: null (string, nullable) - URL of the previous page of results.
+
+## Account (object)
+
++ id: 1 (number)
++ title: Paid leave (string) - Title of the absence.
++ backColor: #2c2f3b (string) - Color of the absence shown in the interface in hexadecimal format.
++ distribution: false (boolean) - If `true`, the absence is considered as secondary. **IMPROVEMENT NEEDED**
++ show: true (boolean) - Whether or not the absence is bookable directly by the user.
 
 ## Leave Request (object)
 
