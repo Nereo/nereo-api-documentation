@@ -72,6 +72,81 @@ Retrieve all the Users.
         + results (array[User]) - Array of results.
 
 
+# Group Calendar Layers
+Calendar Layers represent recurring weeks or annual calendars that could be added to a Calendar Profile. They are useful to know when the employee actually works to count correctly the leave.
+
+## Calendar Layer [/calendar-layers/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the Calendar Layer.
+
+### Retrieve a Calendar Layer [GET]
+Retrieve the Calendar Layer with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Calendar Layer)
+       
+## Calendar Layers Collection [/calendar-layers/]
+
+### Retrieve all Calendar Layers [GET]
+Retrieve all the Calendar Layers.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Calendar Layer]) - Array of results.
+
+
+# Group Calendar Profiles
+Calendar Profiles represent a set of Calendar Layers that can be associated to a User. A common case is to setup a Calendar Profile with the Calendar Layers "Week-end" and "Public holidays".
+
+## Calendar Profile [/calendar-profiles/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the Calendar Profile.
+
+### Retrieve a Calendar Profile [GET]
+Retrieve the Calendar Profile with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Calendar Profile)
+       
+## Calendar Profiles Collection [/calendar-profiles/]
+
+### Retrieve all Calendar Profiles [GET]
+Retrieve all the Calendar Profiles.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Calendar Profile]) - Array of results.
+
+
+# Group Free Calendars
+Free Calendars are convenient calendars provided by the Nereo team. Currently, it is used only to display French school holidays. *They are not taken into account in any computation*.
+
+## Free Calendar [/free-calendars/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the Free Calendar.
+
+### Retrieve a Free Calendar [GET]
+Retrieve the Free Calendar with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Free Calendar)
+       
+## Free Calendars Collection [/free-calendars/]
+
+### Retrieve all Free Calendars [GET]
+Retrieve all the Free Calendars.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Free Calendar]) - Array of results.
+
+
 # Group Accounts
 Accounts represent all the absences types available in your company: paid leaves, sick leave, etc.
 
@@ -473,16 +548,27 @@ account has to be provided.
 ## Calendar Profile (object)
 
 + id: 1 (number)
-+ title: Full-time (string) - Title for this Calendar Profile
++ title: Full-time (string) - Title for this Calendar Profile.
 + calendars: 1, 2, 3, 4 (array[number]) - List of IDs of Calendar Layers associated to this Calendar Profile.
 
 ## Calendar Layer (object)
 
 + id: 1 (number)
-+ title: Week-ends (string) - Title for this Calendar Layer
++ title: Week-ends (string) - Title for this Calendar Layer.
 + calendarFeeder (string) - JavaScript function that resolves internally to days-off.
 + editor WE (enum) - Calendar editor type to show in the interface.
     + WE (string) - Week
     + MO (string) - Month
     + YR (string) - Year
     + SC (string) - Script
+
+## Free Calendar (object)
+
++ id: 1 (number)
++ title: School Holidays A (string) - Title for this Free Calendar.
++ key: school_holidasy_a (string) - Key for this Free Calendar.
++ dates (array[Free Calendar Date]) - List of dates on this Free Calendar.
+
+## Free Calendar Date (object)
+
++ dateKey: `2017-08-31` (string) - Date on this Free Calendar.
