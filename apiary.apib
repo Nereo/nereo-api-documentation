@@ -97,7 +97,38 @@ Retrieve all the Accounts.
 + Response 200
     + Attributes (object)
         + Include Pagination
-        + results (array[Account]) - Array of results. 
+        + results (array[Account]) - Array of results.
+
+
+# Group Timed Accountd
+Accounts are not used alone. Each one is associated to one or several Timed Accounts which are absences associated to a period of accrual (when Nereo credits the account) and a period of consumption (when the employee is allowed to book leave on this account).
+
+## Timed Account [/timed-accounts/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the Timed Account.
+
+### Retrieve a Timed Account [GET]
+Retrieve the Timed Account with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Timed Account)
+       
+## Timed Account Collection [/timed-accounts/{?account}{?user}{?closed}{?hidden}]
+
++ Parameters
+    + account: 1 (number, optional) - Filter the Timed Accounts associated to this Account ID.
+    + user: 1 (number, optional) - Filter the Timed Accounts on which the User ID is allowed on.
+    + closed: false (boolean, optional) - Filter the Timed Accounts that are closed.
+    + hidden: false (boolean, optional) - Filter the Timed Accounts that are hidden to the employees.
+
+### Retrieve all Timed Accounts [GET]
+Retrieve all the Timed Accounts.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Timed Account]) - Array of results.
 
 
 # Group Leave Requests
@@ -282,6 +313,34 @@ account has to be provided.
 + backColor: #2c2f3b (string) - Color of the absence shown in the interface in hexadecimal format.
 + distribution: false (boolean) - If `true`, the absence is considered as secondary. **IMPROVEMENT NEEDED**
 + show: true (boolean) - Whether or not the absence is bookable directly by the user.
++ priority: 1 (number) - Order of the absence in the list. **IMPROVEMENT NEEDED**
++ visibleInPlanning: false (boolean) - Whether or not the absence is visible by everyone in the schedule. **IMPROVEMENT NEEDED**
++ adjusterType: Oe (enum) - Type of counting of the absence. **IMPROVEMENT NEEDED**
+    + Ho (string) - Absence is counted in hours.
+    + Oe (string) - Absence is counted in worked days ("jours ouvrés" in French law).
+    + Oa (string) - Absence is counted in workable days ("jours ouvrables" in French law).
+    + Ca (string) - Absence is counted in calendar days ("jours calendaires" in French law).
+
+## Timed Account (object)
+
++ id: 1 (number)
++ key: ta_paidleave20162017 (string) - Key associated to the Timed Account, used in some parts of the API. *We'll try to get rid of it ASAP*.
++ tatitle: `Paid leave 2016-2017` (string) - Title of the Timed Account.
++ account: 1 (number) - ID of the Account associated to this Timed Account.
++ startCredit: `2016-06-01` (string) - Begin date of the accrual period in format `YYYY-MM-DD`.
++ endCredit: `2017-05-31` (string) - End date of the accrual period in format `YYYY-MM-DD`.
++ startDebt: `2017-06-01` (string) - Begin date of the consumption period in format `YYYY-MM-DD`.
++ endDebt: `2018-05-31` (string) - End date of the consumption period in format `YYYY-MM-DD`.
++ closeDate: `2018-06-01` (string) - Date in format `YYYY-MM-DD` from which the Timed Account is closed in format: no more entries are allowed.
++ color: #2c2f3b (string) - Color of the absence shown in the interface in hexadecimal format (same as `backColor` on Account).
++ secondary: false (boolean) - Whether or not the absence is considered as secondary (same as `!distribution` on Account).
++ order: 1 (number) - Order of the absence in the list (same as `priority` on Account).
++ visible_in_planning: false (boolean) - Whether or not the absence is visible by everyone in the schedule (same as `visibleInPlanning` on Account).
++ adjuster_type: Oe (enum) - Type of counting of the absence (same as `adjusterType` on Account).
+    + Ho (string) - Absence is counted in hours.
+    + Oe (string) - Absence is counted in worked days ("jours ouvrés" in French law).
+    + Oa (string) - Absence is counted in workable days ("jours ouvrables" in French law).
+    + Ca (string) - Absence is counted in calendar days ("jours calendaires" in French law).
 
 ## Leave Request (object)
 
