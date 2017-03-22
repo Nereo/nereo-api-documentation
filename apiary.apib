@@ -26,6 +26,51 @@ Authorization: Token MyRandomToken
 >    * If you're a **validator**, you'll be able to view, create and edit your objects and the ones belonging to the persons you validate ;
 >    * If you're a **regular user**, you'll only be able to view, create and edit your own objects.
 
+# Group Users
+Users represent the employees of the company managing their leave on Nereo.
+
+## User [/users/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the User.
+    
+### Retrieve a User [GET]
+Retrieve the User with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (User)
+    
+### Get the balances of a User [POST /leaverequests/{id}/balances/]
+Get the balances of *each* absences types of a User for *each* day between two dates.
+
++ Request
+    + Attributes (object)
+        + begin_date: `2017-01-01` (string, required) - First date to retrieve in format `YYYY-MM-DD`.
+        + end_date: `2017-01-07` (string, required) - Last date to retrieve in format `YYYY-MM-DD`.
+        
++ Response 200 (application/json)
+    + Attributes (array)
+        + (object)
+            + accountKey: `ta_123` (string) - Key of the Timed Account (NOT the ID) **IMPROVEMENT NEEDED**
+            + balances (array)
+                + (object)
+                    + date: `2017-01-01`(string) - Date of the balance in format `YYYY-MM-DD`.
+                    + value: 2.08 (number) - Balance of the Timed Account for this User at `date`.
+    
+## Users Collection [/users/{?disabled}{?validated}]
+
++ Parameters
+    + disabled: false (boolean, optional) - Filter the Users that are disabled, i.e. `endDate` is not null and is older that seven days ago.
+    + validated: false (boolean, optional) - Filter the Users that the user validates.
+    
+### Retrieve all Users [GET]
+Retrieve all the Users.
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[User]) - Array of results.
+        
 # Group Leave Requests
 Leave requests are at the heart of the Nereo system: they represent an absence of an employee.
 
@@ -192,52 +237,6 @@ account has to be provided.
 
 + Response 200
     + Attributes (Leave Request)
-    
-# Group Users
-Users represent the employees of the company managing their leave on Nereo.
-
-## User [/users/{id}/]
-
-+ Parameters
-    + id: 1 (number) - The ID of the User.
-    
-### Retrieve a User [GET]
-Retrieve the User with the given ID.
-
-+ Response 200 (application/json)
-    + Attributes (User)
-    
-### Get the balances of a User [POST /leaverequests/{id}/balances/]
-Get the balances of *each* absences types of a User for *each* day between two dates.
-
-+ Request
-    + Attributes (object)
-        + begin_date: `2017-01-01` (string, required) - First date to retrieve in format `YYYY-MM-DD`.
-        + end_date: `2017-01-07` (string, required) - Last date to retrieve in format `YYYY-MM-DD`.
-        
-+ Response 200 (application/json)
-    + Attributes (array)
-        + (object)
-            + accountKey: `ta_123` (string) - Key of the Timed Account (NOT the ID) **IMPROVEMENT NEEDED**
-            + balances (array)
-                + (object)
-                    + date: `2017-01-01`(string) - Date of the balance in format `YYYY-MM-DD`.
-                    + value: 2.08 (number) - Balance of the Timed Account for this User at `date`.
-    
-## Users Collection [/users/{?disabled}{?validated}]
-
-+ Parameters
-    + disabled: false (boolean, optional) - Filter the Users that are disabled, i.e. `endDate` is not null and is older that seven days ago.
-    + validated: false (boolean, optional) - Filter the Users that the user validates.
-    
-### Retrieve all Users [GET]
-Retrieve all the Users.
-
-+ Response 200
-    + Attributes (object)
-        + Include Pagination
-        + results (array[User]) - Array of results.
-
 
 # Data structures
 
