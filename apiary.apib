@@ -2,11 +2,16 @@ FORMAT: 1A
 HOST: https://absences.nereo.com/api
 
 # Nereo API
+
+> WORK IN PROGRESS
+>
+> PLEASE NOTE THAT THIS DOCUMENTATION IS NOT YET COMPLETE
+
 Nereo API let's you integrate leaves management into your internal processes or tools. [Save time: automate leaves management with Nereo.](https://nereo.com)
 
 > At the moment, only leave requests can be created and edited. The other endpoints are read-only, but they will come later.
 
-**[Subscribe to our newsletter to be kept informed of the evolutions of the API](https://app.mailjet.com/widget/iframe/25Ry/2xV)**
+**[Subscribe to our API newsletter to be kept informed of the evolutions.](https://app.mailjet.com/widget/iframe/25Ry/2xV)**
 
 ## Authentication
 To authenticate through the API, you will need a token that you have to provide in the `Authorization` header of your request, prefixed by the keyword `Token`. For example:
@@ -185,6 +190,20 @@ account has to be provided.
 
 + Response 200
     + Attributes (Leave Request)
+    
+# Group Users
+Users represent the employees of the company managing their leave on Nereo.
+
+## User [/users/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the User.
+
+### Retrieve a User [GET]
+Retrieve the User with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (User)
 
 # Data structures
 
@@ -240,3 +259,33 @@ account has to be provided.
 + `morning_included`: true (boolean, required) - Whether or not the morning of the `begin_date` is included in the absence.
 + `afternoon_included`: true (boolean, required) - Whether or not the afternoon of the `end_date` is included in the absence.
 + Include Comment
+
+## User (object)
+
++ id: 1 (number)
++ username: adent (string) - Username of the User used to login.
++ email: adent@42.com (string) - E-mail address of the User.
++ firstName: Arthur (string) - First name of the User.
++ lastName: Dent (string) - Last name of the User.
++ phone: null (string, nullable) - Phone number of the User.
++ birthDate: `1978-01-01` (string, nullable) - Birthdate of the User in format `YYYY-MM-DD`.
++ isAdmin: false (boolean) - Whether or not this User has the admin rights on the company.
++ startDate: `2010-01-01` (string, nullable) - Date of arrival of the User in the company in format `YYYY-MM-DD`.
++ endDate: `2017-01-01` (string, nullable) - Date of departure of the User from the company in format `YYYY-MM-DD`.
++ planViewRight: AT (enum) - Vision rights of the User on the planning.
+    + HS (string) - "Himself", the User can only view himself in the planning.
+    + HT (string) - "His team", the User can view himself and the Users of his team in the planning.
+    + AT (string) - "All team", the User can view everyone in the planning.
++ validator1: 2 (number) - User ID of the first validator of the User.
++ validator2: 3 (number, nullable) - User ID of the second validator of the User.
++ substituteValidator: 4 (number, nullable) - User ID of the User replacing this User for validation when he is absent.
++ externalId: adent (string, nullable) - Identifier used for some payroll exports.
++ comment: Interpreted in 2005 by Martin Freeman (string, nullable) - Comment added by an admin about the User.
++ timedAccounts: 1, 2, 3, 4 (array[number]) - List of IDs of Timed Accounts the User is allowed on.
++ calendarProfilePeriods (array[Calendar Profile Period]) - Calendar Profiles of the User.
+
+## Calendar Profile Period (object)
+
++ calendarProfile: 1 (number) - ID of the Calendar Profile.
++ startDate: `2016-01-01` (string) - Date from which this Calendar Profile is applied.
++ endDate: `2016-12-31` (string) - Date until which this Calendar Profile is applied.
