@@ -330,10 +330,10 @@ Add a comment to the Leave Request.
 ## Leave Requests Collection [/leaverequests/{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}{?has_cancellation_request_pending}{?to_validate}]
 
 + Parameters
-    + user: 1 (number, optional) - ID of the User concerned by the Leave Request.
+    + user: 1 (number, optional) - ID of the User concerned by the Leave Request. *It's possible to put this query parameter several times to filter on several users.*
     + min_date: `2017-01-01` (string, optional) - Filter the Leave Requests *from* this date.
     + max_date: `2017-01-07` (string, optional) - Filter the Leave Requests *until* this date.
-    + state: Re (string, optional) - Filter the Leave Requests at this `state`.
+    + state: Re (string, optional) - Filter the Leave Requests at this `state`. *It's possible to put this query parameter several times to filter on several states.*
     + `is_cancellation_request`: false (boolean, optional) - Filter the Leave Requests that are cancellation Leave Requests of others.
     + `has_cancellation_request_pending`: false (boolean, optional) - Filter the Leave Requests that have cancellation Leave Requests pending validation.
     + `to_validate`: false (boolean, optional) - Filter the Leave Requests that the current user has to validate (cancellation Leave Requests included).
