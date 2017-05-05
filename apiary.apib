@@ -412,6 +412,43 @@ account has to be provided.
 
 + Response 200
     + Attributes (Leave Request)
+    
+# Group Administration
+This section details all the administration-related endpoints.
+**An administrator token is required to access them**.
+
+## Google Calendar synchronization [/admin/google-calendar-sync/]
+If you use Google G Suite in your company, you can synchronize leave requests between Nereo and the Google calendars of your collaborators: 
+each validated leave requests will automatically be added to their respective calendar.
+
+### Get Google Calendar synchronization status [GET]
+Check if Google Calendar synchronization is enabled on your instance and Nereo is allowed to access
+your Google domain.
+
++ Response 200
+    + Attributes (Google Calendar synchronization)
+        
+### Update Google Calendar synchronization settings [POST]
+Enable or disable Google Calendar synchronization on your instance.
+
++ Request
+    + Attributes (object)
+        + synchronization_enabled: true (boolean) - Whether or not to enable Google Calendar synchronization on your Nereo instance.
+
++ Response 200
+    + Attributes (Google Calendar synchronization)
+    
+### Force Google Calendar synchronization [POST /admin/google-calendar-sync/synchronize/]
+Manually launch the synchronization of the leave requests to the Google calendars of your collaborators.
+
++ Response 200
+    + Attributes (object)
+        + detail: Request synchronization pending. (string) - Status message.
+        + process_id: `e1e1e702-29dd-4543-befd-ac3fb5775556` (string) - ID of the synchronization process.
+
++ Response 403
+    + Attributes (object)
+        + detail: `Google Calendar synchronization is disabled on your instance or hasn't been allowed in your Google domain's settings.` (string) - Status message.
 
 # Data structures
 
@@ -572,3 +609,8 @@ account has to be provided.
 ## Free Calendar Date (object)
 
 + dateKey: `2017-08-31` (string) - Date on this Free Calendar.
+
+## Google Calendar synchronization (object)
+
++ synchronization_enabled: true (boolean) - Whether or not the Google Calendar synchronization is enabled on your Nereo instance.
++ authorized: true (boolean) - Whether or not Nereo is allowed to access to your Google domain.
