@@ -8,7 +8,7 @@ import argparse
 import datetime
 import requests
 
-NEREO_API_BASE_URL = 'https://absences.nereoapptest.com/api'
+NEREO_API_BASE_URL = 'https://absences.nereo.com/api'
 
 
 def parse_day_of_week(day_of_week):
