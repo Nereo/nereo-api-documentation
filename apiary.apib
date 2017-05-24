@@ -38,23 +38,30 @@ Retrieve the User with the given ID.
 + Response 200 (application/json)
     + Attributes (User)
     
-### Get the balances of a User [POST /leaverequests/{id}/balances/]
+### Get the balances of a User [POST /users/{id}/balances/]
 Get the balances of *each* absences types of a User for *each* day between two dates.
 
 + Request
     + Attributes (object)
-        + begin_date: `2017-01-01` (string, required) - First date to retrieve in format `YYYY-MM-DD`.
+        + start_date: `2017-01-01` (string, required) - First date to retrieve in format `YYYY-MM-DD`.
         + end_date: `2017-01-07` (string, required) - Last date to retrieve in format `YYYY-MM-DD`.
         
 + Response 200 (application/json)
-    + Attributes (array)
-        + (object)
-            + accountKey: `ta_123` (string) - Key of the Timed Account (NOT the ID) **IMPROVEMENT NEEDED**
-            + balances (array)
-                + (object)
-                    + date: `2017-01-01`(string) - Date of the balance in format `YYYY-MM-DD`.
-                    + value: 2.08 (number) - Balance of the Timed Account for this User at `date`.
-    
+    + Attributes (object)
+        + user: 1 (number) - ID of the User
+        + balance_user_accounts (array)
+            + (object)
+                + timed_account: 1 (number) - ID of the Timed Account
+                + balance_dates (array)
+                    + (object)
+                        + date: `2017-07-01`(string) - Date of the balance in format `YYYY-MM-DD`.
+                        + acquisitions_at_date: 2.08 (number) - Amount acquired on this Timed Account for this User at `date`.
+                        + acquisitions_future: 22.96 (number) - Amount to acquire on this Timed Account for this User after `date`.
+                        + consumptions_at_date: 1 (number) - Amount consumed on this Timed Account for this User until `date`.
+                        + acquisitions_future: 22.96 (number) - Amount to consume on this Timed Account for this User after `date`.
+                        + balance: 1.08 (number) - Balance of the Timed Account for this User at `date`.
+                        + remaining_balance: 24 (number) - Amount remaining to consume on this Timed Account for this User (acquired yet or not).
+
 ## Users Collection [/users/{?disabled}{?validated}]
 
 + Parameters
