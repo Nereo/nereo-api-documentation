@@ -336,9 +336,10 @@ Add a comment to the Leave Request.
     + Attributes (object)
         + detail: `You can't comment this request.` (string) - Status message.
 
-## Leave Requests Collection [/leaverequests/{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}{?has_cancellation_request_pending}{?to_validate}]
+## Leave Requests Collection [/leaverequests/{?id}{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}{?has_cancellation_request_pending}{?to_validate}]
 
 + Parameters
+    + id: 1 (number, optional) - ID of the the Leave Request. *It's possible to put this query parameter several times to filter on several leave requests.*
     + user: 1 (number, optional) - ID of the User concerned by the Leave Request. *It's possible to put this query parameter several times to filter on several users.*
     + min_date: `2017-01-01` (string, optional) - Filter the Leave Requests *from* this date.
     + max_date: `2017-01-07` (string, optional) - Filter the Leave Requests *until* this date.
@@ -357,6 +358,61 @@ Retrieve all Leave Requests that the user can review:
     + Attributes (object)
         + Include Pagination
         + results (array[Leave Request]) - Array of results.
+        
+### Cancel Leave Requests in bulk [DELETE]
+Cancel Leave Requests matching the filters. For safety reasons, the header `X-BULK-OPERATION` set to `true` is required. **If any of the Leave Requests selected can't be cancelled, the whole operation is rejected.**
+
++ Request
+    + Headers
+    
+            X-BULK-OPERATION: true
+
++ Response 200
+    + Attributes (object)
+        + detail (array) - Results list
+            + (object)
+                + leave_request: 1 (number) - ID of the Leave Request associated to this result.
+                + cancellationLeaveRequestId: 10 (number, optional) - ID of the cancellation Leave Request.
+                + detail: `A cancellation request has been created.` (string) - Status message.
+                + validated: false (boolean, optional) - Whether or not the cancellation request has automatically been validated. Happens when the cancellation is requested by an administrator or one of the validators of the Employee. 
+
++ Response 403
+List of errors encountered while trying to cancel the selected Leave Requests.
+    + Attributes (Leave Request Bulk Action Error)
+        
+### Validate Leave Requests in bulk [PATCH /leaverequests/validate/{?id}{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}{?has_cancellation_request_pending}{?to_validate}]
+Validate Leave Requests matching the filters. For safety reasons, the header `X-BULK-OPERATION` set to `true` is required. **If any of the Leave Requests selected can't be validated, the whole operation is rejected.**
+
++ Request
+    + Headers
+    
+            X-BULK-OPERATION: true
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Leave Request]) - Array of results.
+
++ Response 403
+List of errors encountered while trying to validate the selected Leave Requests.
+    + Attributes (Leave Request Bulk Action Error)
+    
+### Deny Leave Requests in bulk [PATCH /leaverequests/deny/{?id}{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}{?has_cancellation_request_pending}{?to_validate}]
+Deny Leave Requests matching the filters. For safety reasons, the header `X-BULK-OPERATION` set to `true` is required. **If any of the Leave Requests selected can't be denied, the whole operation is rejected.**
+
++ Request
+    + Headers
+    
+            X-BULK-OPERATION: true
+
++ Response 200
+    + Attributes (object)
+        + Include Pagination
+        + results (array[Leave Request]) - Array of results.
+
++ Response 403
+List of errors encountered while trying to deny the selected Leave Requests.
+    + Attributes (Leave Request Bulk Action Error)
 
 ## Create a simple Leave Request [/leaverequests/quick/]
 Provide an endpoint to create a Leave Request in one call. Only one Timed Account can be provided. If you wish to create a complex Leave Request with several Timed Accounts, refer to the *Create a complex Leave Request* section.
@@ -558,6 +614,13 @@ Manually launch the synchronization of the leave requests to the Google calendar
 + `morning_included`: true (boolean, required) - Whether or not the morning of the `begin_date` is included in the absence.
 + `afternoon_included`: true (boolean, required) - Whether or not the afternoon of the `end_date` is included in the absence.
 + Include Comment
+
+## Leave Request Bulk Action Error (object)
+
++ detail (array) - Errors list
+    + (object)
+        + leave_request: 1 (number) - ID of the Leave Request provoking the error.
+        + detail: `Nice try but no, you can't validate your own request 😜` (string) - Status message.
 
 ## User (object)
 
