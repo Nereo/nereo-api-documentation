@@ -71,7 +71,7 @@ Get the balances of *each* absences types of a User for *each* day between two d
 ### Retrieve all Users [GET]
 Retrieve all the Users.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[User]) - Array of results.
@@ -96,7 +96,7 @@ Retrieve the Calendar Layer with the given ID.
 ### Retrieve all Calendar Layers [GET]
 Retrieve all the Calendar Layers.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Calendar Layer]) - Array of results.
@@ -121,7 +121,7 @@ Retrieve the Calendar Profile with the given ID.
 ### Retrieve all Calendar Profiles [GET]
 Retrieve all the Calendar Profiles.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Calendar Profile]) - Array of results.
@@ -146,7 +146,7 @@ Retrieve the Free Calendar with the given ID.
 ### Retrieve all Free Calendars [GET]
 Retrieve all the Free Calendars.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Free Calendar]) - Array of results.
@@ -174,7 +174,7 @@ Retrieve the Account with the given ID.
 ### Retrieve all Accounts [GET]
 Retrieve all the Accounts.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Account]) - Array of results.
@@ -205,7 +205,7 @@ Retrieve the Timed Account with the given ID.
 ### Retrieve all Timed Accounts [GET]
 Retrieve all the Timed Accounts.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Timed Account]) - Array of results.
@@ -236,7 +236,7 @@ Retrieve the Flow with the given ID.
 ### Retrieve all Flows [GET]
 Retrieve all the Flows.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Flow]) - Array of results.
@@ -354,7 +354,7 @@ Retrieve all Leave Requests that the user can review:
 * It's own and the ones of the Employees the user validates.
 * Only it's own otherwise.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Leave Request]) - Array of results.
@@ -367,7 +367,7 @@ Cancel Leave Requests matching the filters. For safety reasons, the header `X-BU
     
             X-BULK-OPERATION: true
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + detail (array) - Results list
             + (object)
@@ -376,7 +376,7 @@ Cancel Leave Requests matching the filters. For safety reasons, the header `X-BU
                 + detail: `A cancellation request has been created.` (string) - Status message.
                 + validated: false (boolean, optional) - Whether or not the cancellation request has automatically been validated. Happens when the cancellation is requested by an administrator or one of the validators of the Employee. 
 
-+ Response 403
++ Response 403 (application/json)
 List of errors encountered while trying to cancel the selected Leave Requests.
     + Attributes (Leave Request Bulk Action Error)
         
@@ -388,12 +388,12 @@ Validate Leave Requests matching the filters. For safety reasons, the header `X-
     
             X-BULK-OPERATION: true
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Leave Request]) - Array of results.
 
-+ Response 403
++ Response 403 (application/json)
 List of errors encountered while trying to validate the selected Leave Requests.
     + Attributes (Leave Request Bulk Action Error)
     
@@ -405,12 +405,12 @@ Deny Leave Requests matching the filters. For safety reasons, the header `X-BULK
     
             X-BULK-OPERATION: true
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + Include Pagination
         + results (array[Leave Request]) - Array of results.
 
-+ Response 403
++ Response 403 (application/json)
 List of errors encountered while trying to deny the selected Leave Requests.
     + Attributes (Leave Request Bulk Action Error)
 
@@ -424,10 +424,10 @@ Provide an endpoint to create a Leave Request in one call. Only one Timed Accoun
         + Include Leave Request Creation Base
         + timed_account: 1 (number, required) - ID of the Timed Account on which withdraw the absence.
         
-+ Response 200
++ Response 200 (application/json)
     + Attributes (Leave Request)
     
-+ Response 400
++ Response 400 (application/json)
     Happens when:
     * The user doesn't have the rights to create a Leave Request on behalf of the Employee.
     * The Account associated to the Timed Account provided is `hidden` and the user is not an admin.
@@ -456,7 +456,7 @@ That's why we need an endpoint that provide groups of accounts that will weigh t
         + begin_date: `2017-01-01` (string, required) - First date of the absence in format `YYYY-MM-DD`.
         + end_date: `2017-01-07` (string, required) - Last date of the absence in format `YYYY-MM-DD`.
         
-+ Response 200
++ Response 200 (application/json)
     + Attributes (array)
         + (object)
             + groupKey: adjGrp0 (string) - ID of the accounts group. *Needed later for the creation of the Leave Request*
@@ -473,7 +473,7 @@ account has to be provided.
     + Attributes (object)
         + Include Leave Request Creation Base
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (Leave Request)
     
 # Group Administration
@@ -488,7 +488,7 @@ each validated leave requests will automatically be added to their respective ca
 Check if Google Calendar synchronization is enabled on your instance and Nereo is allowed to access
 your Google domain.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (Google Calendar synchronization)
         
 ### Update Google Calendar synchronization settings [POST]
@@ -498,18 +498,18 @@ Enable or disable Google Calendar synchronization on your instance.
     + Attributes (object)
         + synchronization_enabled: true (boolean) - Whether or not to enable Google Calendar synchronization on your Nereo instance.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (Google Calendar synchronization)
     
 ### Force Google Calendar synchronization [POST /admin/google-calendar-sync/synchronize/]
 Manually launch the synchronization of the leave requests to the Google calendars of your collaborators.
 
-+ Response 200
++ Response 200 (application/json)
     + Attributes (object)
         + detail: Request synchronization pending. (string) - Status message.
         + process_id: `e1e1e702-29dd-4543-befd-ac3fb5775556` (string) - ID of the synchronization process.
 
-+ Response 403
++ Response 403 (application/json)
     + Attributes (object)
         + detail: `Google Calendar synchronization is disabled on your instance or hasn't been allowed in your Google domain's settings.` (string) - Status message.
 
