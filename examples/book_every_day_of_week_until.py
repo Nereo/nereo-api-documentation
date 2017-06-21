@@ -45,6 +45,11 @@ parser.add_argument(
     type=int
 )
 parser.add_argument(
+    '--user',
+    help='ID of the User you want to book for. If not provided, booked for you.',
+    type=int
+)
+parser.add_argument(
     'start_date',
     help='Start date of the recursion in the format YYYY-MM-DD',
     type=parse_iso_date
@@ -60,19 +65,24 @@ args = parser.parse_args()
 current_date = args.start_date
 while (current_date <= args.end_date):
     if (current_date.isoweekday() == args.day_of_week):
+        request_data = {
+            'begin_date': current_date.isoformat(),
+            'end_date': current_date.isoformat(),
+            'morning_included': True,
+            'afternoon_included': True,
+            'timed_account': args.timed_account_id,
+        }
+        if (args.user):
+            request_data['user'] = args.user
+
         r = requests.post(
             '%s/leaverequests/quick/' % NEREO_API_BASE_URL,
-            {
-                'begin_date': current_date.isoformat(),
-                'end_date': current_date.isoformat(),
-                'morning_included': True,
-                'afternoon_included': True,
-                'timed_account': args.timed_account_id
-            },
+            request_data,
             headers={'Authorization': 'Token %s' % args.token}
         )
+
         if (r.status_code != 201):
-            raise Exception(r.json())
+            print('Request not created for %s: %s' % (current_date.isoformat(), r.json()))
         else:
             print('Request created for %s' % current_date.isoformat())
     current_date += datetime.timedelta(days=1)
