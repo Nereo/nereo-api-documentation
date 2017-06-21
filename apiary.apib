@@ -62,9 +62,10 @@ Get the balances of *each* absences types of a User for *each* day between two d
                         + balance: 1.08 (number) - Balance of the Timed Account for this User at `date`.
                         + remaining_balance: 24 (number) - Amount remaining to consume on this Timed Account for this User (acquired yet or not).
 
-## Users Collection [/users/{?disabled}{?validated}]
+## Users Collection [/users/{?name}{?disabled}{?validated}]
 
 + Parameters
+    + name: arth (string, optional) - Filter the Users with `firstName` or `lastName` partially matching this value (case insensitive).
     + disabled: false (boolean, optional) - Filter the Users that are disabled, i.e. `endDate` is not null and is older that seven days ago.
     + validated: false (boolean, optional) - Filter the Users that the user validates.
     
@@ -194,9 +195,10 @@ Retrieve the Timed Account with the given ID.
 + Response 200 (application/json)
     + Attributes (Timed Account)
        
-## Timed Accounts Collection [/timed-accounts/{?account}{?user}{?closed}{?hidden}]
+## Timed Accounts Collection [/timed-accounts/{?title}{?account}{?user}{?closed}{?hidden}]
 
 + Parameters
+    + title: paid (string, optional) - Filter the Timed Accounts with `tatitle` partially matching this value (case insensitive).
     + account: 1 (number, optional) - Filter the Timed Accounts associated to this Account ID.
     + user: 1 (number, optional) - Filter the Timed Accounts on which the User ID is allowed on.
     + closed: false (boolean, optional) - Filter the Timed Accounts that are closed.
@@ -625,6 +627,7 @@ Manually launch the synchronization of the leave requests to the Google calendar
 ## User (object)
 
 + id: 1 (number)
++ organization_slug: h2g2 (string) - Slug of the Organization which the User belongs to.
 + username: adent (string) - Username of the User used to login.
 + email: adent@42.com (string) - E-mail address of the User.
 + firstName: Arthur (string) - First name of the User.
