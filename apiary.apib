@@ -572,9 +572,15 @@ Manually launch the synchronization of the leave requests to the Google calendar
 + next: null (string, nullable) - URL of the next page of results.
 + previous: null (string, nullable) - URL of the previous page of results.
 
+## CreatedAtUpdatedAt (object)
+
++ created_at: `2017-06-02T13:37:42.000000Z`(string) - Creation date of the object.
++ updated_at: `2017-06-02T13:37:42.000000Z`(string) - Last update date of the object.
+
 ## Account (object)
 
 + id: 1 (number)
++ Include CreatedAtUpdatedAt
 + title: Paid leave (string) - Title of the absence.
 + backColor: #2c2f3b (string) - Color of the absence shown in the interface in hexadecimal format.
 + distribution: false (boolean) - If `true`, the absence is considered as secondary. **IMPROVEMENT NEEDED**
@@ -590,6 +596,7 @@ Manually launch the synchronization of the leave requests to the Google calendar
 ## Timed Account (object)
 
 + id: 1 (number)
++ Include CreatedAtUpdatedAt
 + key: ta_paidleave20162017 (string) - Key associated to the Timed Account, used in some parts of the API. *We'll try to get rid of it ASAP*.
 + tatitle: `Paid leave 2016-2017` (string) - Title of the Timed Account.
 + account: 1 (number) - ID of the Account associated to this Timed Account.
@@ -611,6 +618,7 @@ Manually launch the synchronization of the leave requests to the Google calendar
 ## Flow (object)
 
 + id: 1 (number)
++ Include CreatedAtUpdatedAt
 + title: Consumption (string) - Title of the Flow.
 + recordDate: `2016-12-01` (string) - Date on which this Flow is recorded  in format `YYYY-MM-DD`.
 + accountDate: `2017-01-01` (string) - Date on which this Flow is accounted in format `YYYY-MM-DD`.
@@ -701,8 +709,7 @@ Manually launch the synchronization of the leave requests to the Google calendar
 ## Group (object)
 
 + id: 1 (number)
-+ created_at: `2017-06-02T13:37:42.000000Z`(string) - Creation date of the Group.
-+ updated_at: `2017-06-02T13:37:42.000000Z`(string) - Last update date of the Group.
++ Include CreatedAtUpdatedAt
 + name: `H2G2`(string) - Name of the Group.
 + slug: `h2g2` (string) - Slug of the Group.
 + description: `The Hitchhiker's Guide to the Galaxy` (string) - Description of the Group. **Unused at the moment**.
