@@ -31,13 +31,13 @@ Users represent the employees of the company managing their leave on Nereo.
 
 + Parameters
     + id: 1 (number) - The ID of the User.
-    
+
 ### Retrieve a User [GET]
 Retrieve the User with the given ID.
 
 + Response 200 (application/json)
     + Attributes (User)
-    
+
 ### Get the balances of a User [POST /users/{id}/balances/]
 Get the balances of *each* absences types of a User for *each* day between two dates.
 
@@ -45,7 +45,7 @@ Get the balances of *each* absences types of a User for *each* day between two d
     + Attributes (object)
         + start_date: `2017-01-01` (string, required) - First date to retrieve in format `YYYY-MM-DD`.
         + end_date: `2017-01-07` (string, required) - Last date to retrieve in format `YYYY-MM-DD`.
-        
+
 + Response 200 (application/json)
     + Attributes (object)
         + user: 1 (number) - ID of the User
@@ -68,7 +68,7 @@ Get the balances of *each* absences types of a User for *each* day between two d
     + name: arth (string, optional) - Filter the Users with `firstName` or `lastName` partially matching this value (case insensitive).
     + disabled: false (boolean, optional) - Filter the Users that are disabled, i.e. `endDate` is not null and is older that seven days ago.
     + validated: false (boolean, optional) - Filter the Users that the user validates.
-    
+
 ### Retrieve all Users [GET]
 Retrieve all the Users.
 
@@ -90,13 +90,13 @@ Retrieve the Group with the given ID.
 
 + Response 200 (application/json)
     + Attributes (GroupWithMPTT)
-    
+
 ### Update a Group [PATCH]
 Update the Group with the Given ID. **Administrators only**.
 
 + Request
     + Attributes (Group)
-    
+
 + Response 200 (application/json)
     + Attributes (GroupWithMPTT)
 
@@ -115,10 +115,10 @@ Create a new Group. **Administrators only**.
 
 + Request
     + Attributes (Group)
-    
+
 + Response 201 (application/json)
     + Attributes (GroupWithMPTT)
-    
+
 ### Retrieve all Groups [GET]
 Retrieve all the Groups.
 
@@ -140,7 +140,7 @@ Retrieve the Calendar Layer with the given ID.
 
 + Response 200 (application/json)
     + Attributes (Calendar Layer)
-       
+
 ## Calendar Layers Collection [/calendar-layers/]
 
 ### Retrieve all Calendar Layers [GET]
@@ -150,7 +150,6 @@ Retrieve all the Calendar Layers.
     + Attributes (object)
         + Include Pagination
         + results (array[Calendar Layer]) - Array of results.
-
 
 # Group Calendar Profiles
 Calendar Profiles represent a set of Calendar Layers that can be associated to a User. A common case is to setup a Calendar Profile with the Calendar Layers "Week-end" and "Public holidays".
@@ -165,7 +164,7 @@ Retrieve the Calendar Profile with the given ID.
 
 + Response 200 (application/json)
     + Attributes (Calendar Profile)
-       
+
 ## Calendar Profiles Collection [/calendar-profiles/]
 
 ### Retrieve all Calendar Profiles [GET]
@@ -175,7 +174,6 @@ Retrieve all the Calendar Profiles.
     + Attributes (object)
         + Include Pagination
         + results (array[Calendar Profile]) - Array of results.
-
 
 # Group Free Calendars
 Free Calendars are convenient calendars provided by the Nereo team. Currently, it is used only to display French school holidays. *They are not taken into account in any computation*.
@@ -190,7 +188,7 @@ Retrieve the Free Calendar with the given ID.
 
 + Response 200 (application/json)
     + Attributes (Free Calendar)
-       
+
 ## Free Calendars Collection [/free-calendars/]
 
 ### Retrieve all Free Calendars [GET]
@@ -200,7 +198,6 @@ Retrieve all the Free Calendars.
     + Attributes (object)
         + Include Pagination
         + results (array[Free Calendar]) - Array of results.
-
 
 # Group Accounts
 Accounts represent all the absences types available in your company: paid leaves, sick leave, etc.
@@ -215,7 +212,7 @@ Retrieve the Account with the given ID.
 
 + Response 200 (application/json)
     + Attributes (Account)
-       
+
 ## Accounts Collection [/accounts/{?hidden}]
 
 + Parameters
@@ -228,7 +225,6 @@ Retrieve all the Accounts.
     + Attributes (object)
         + Include Pagination
         + results (array[Account]) - Array of results.
-
 
 # Group Timed Accounts
 Accounts are not used alone. Each one is associated to one or several Timed Accounts which are absences associated to a period of accrual (when Nereo credits the account) and a period of consumption (when the employee is allowed to book leave on this account).
@@ -243,7 +239,7 @@ Retrieve the Timed Account with the given ID.
 
 + Response 200 (application/json)
     + Attributes (Timed Account)
-       
+
 ## Timed Accounts Collection [/timed-accounts/{?title}{?account}{?user}{?closed}{?hidden}]
 
 + Parameters
@@ -261,7 +257,6 @@ Retrieve all the Timed Accounts.
         + Include Pagination
         + results (array[Timed Account]) - Array of results.
 
-
 # Group Flows
 Flows represent an entry in a Timed Account for a particular User.
 
@@ -275,7 +270,7 @@ Retrieve the Flow with the given ID.
 
 + Response 200 (application/json)
     + Attributes (Flow)
-       
+
 ## Flows Collection [/flows/{?min_date}{?max_date}{?user}{?timed_account}]
 
 + Parameters
@@ -299,10 +294,9 @@ Internally, Nereo executes the accrual rules everyday to compute the new Flows t
     + Attributes (object)
         + timed_account: 1 (number, required) - ID of the Timed Account to get the estimations Flows for.
         + user: 1 (number, required) - ID of the User to get the estimations Flows for.
-        
+
 + Response 200 (application/json)
     + Attributes (array[Flow])
-
 
 # Group Leave Requests
 Leave requests are at the heart of the Nereo system: they represent an absence of an employee.
@@ -317,7 +311,7 @@ Retrieve the Leave Request with the given ID.
 
 + Response 200 (application/json)
     + Attributes (Leave Request)
-    
+
 ### Cancel a Leave Request [DELETE]
 Delete the Leave Request if it has not been validated yet (`state` is `Re`) **or** create a cancellation Leave Request otherwise.
 
@@ -409,13 +403,13 @@ Retrieve all Leave Requests that the user can review:
     + Attributes (object)
         + Include Pagination
         + results (array[Leave Request]) - Array of results.
-        
+
 ### Cancel Leave Requests in bulk [DELETE]
 Cancel Leave Requests matching the filters. For safety reasons, the header `X-BULK-OPERATION` set to `true` is required. **If any of the Leave Requests selected can't be cancelled, the whole operation is rejected.**
 
 + Request
     + Headers
-    
+
             X-BULK-OPERATION: true
 
 + Response 200 (application/json)
@@ -430,13 +424,13 @@ Cancel Leave Requests matching the filters. For safety reasons, the header `X-BU
 + Response 403 (application/json)
 List of errors encountered while trying to cancel the selected Leave Requests.
     + Attributes (Leave Request Bulk Action Error)
-        
+
 ### Validate Leave Requests in bulk [PATCH /leaverequests/validate/{?id}{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}{?has_cancellation_request_pending}{?to_validate}]
 Validate Leave Requests matching the filters. For safety reasons, the header `X-BULK-OPERATION` set to `true` is required. **If any of the Leave Requests selected can't be validated, the whole operation is rejected.**
 
 + Request
     + Headers
-    
+
             X-BULK-OPERATION: true
 
 + Response 200 (application/json)
@@ -447,13 +441,13 @@ Validate Leave Requests matching the filters. For safety reasons, the header `X-
 + Response 403 (application/json)
 List of errors encountered while trying to validate the selected Leave Requests.
     + Attributes (Leave Request Bulk Action Error)
-    
+
 ### Deny Leave Requests in bulk [PATCH /leaverequests/deny/{?id}{?user}{?min_date}{?max_date}{?state}{?is_cancellation_request}{?has_cancellation_request_pending}{?to_validate}]
 Deny Leave Requests matching the filters. For safety reasons, the header `X-BULK-OPERATION` set to `true` is required. **If any of the Leave Requests selected can't be denied, the whole operation is rejected.**
 
 + Request
     + Headers
-    
+
             X-BULK-OPERATION: true
 
 + Response 200 (application/json)
@@ -474,10 +468,10 @@ Provide an endpoint to create a Leave Request in one call. Only one Timed Accoun
     + Attributes (object)
         + Include Leave Request Creation Base
         + timed_account: 1 (number, required) - ID of the Timed Account on which withdraw the absence.
-        
+
 + Response 200 (application/json)
     + Attributes (Leave Request)
-    
+
 + Response 400 (application/json)
     Happens when:
     * The user doesn't have the rights to create a Leave Request on behalf of the Employee.
@@ -485,7 +479,7 @@ Provide an endpoint to create a Leave Request in one call. Only one Timed Accoun
     + There are blocking errors preventing this Leave Request to be created (negative balance, consumption constraint not fulfilled, Employee already absent...)
     + Attributes (object)
         + detail: `Impossible request` (string) - Status message.
-        
+
 ## Create a complex Leave Request [/leaverequests/]
 Provide an endpoint to create a complex Leave Request, providing several Timed Account distributed among the days of the absence.
 
@@ -506,14 +500,14 @@ That's why we need an endpoint that provide groups of accounts that will weigh t
         + user: 1 (number, optional) - ID of the User concerned by the Leave Request, the Employee. *If not provided, the new Leave Request is associated to the current user.*
         + begin_date: `2017-01-01` (string, required) - First date of the absence in format `YYYY-MM-DD`.
         + end_date: `2017-01-07` (string, required) - Last date of the absence in format `YYYY-MM-DD`.
-        
+
 + Response 200 (application/json)
     + Attributes (array)
         + (object)
             + groupKey: adjGrp0 (string) - ID of the accounts group. *Needed later for the creation of the Leave Request*
             + nb_days: 7 (number) - Number of days counted by this absence for these accounts.
             + timed_accounts: 1, 2, 3 (array[number]) - List of IDs of the Timed Accounts in this group.
-            
+
 ### Create a complex Leave Request [POST]
 Once the accounts group is selected, a distribution array specifying how the absence is distributed accross all days for each
 account has to be provided.
@@ -526,7 +520,7 @@ account has to be provided.
 
 + Response 200 (application/json)
     + Attributes (Leave Request)
-    
+
 # Group Administration
 This section details all the administration-related endpoints.
 **An administrator token is required to access them**.
@@ -541,7 +535,7 @@ your Google domain.
 
 + Response 200 (application/json)
     + Attributes (Google Calendar synchronization)
-        
+
 ### Update Google Calendar synchronization settings [POST]
 Enable or disable Google Calendar synchronization on your instance.
 
@@ -551,7 +545,7 @@ Enable or disable Google Calendar synchronization on your instance.
 
 + Response 200 (application/json)
     + Attributes (Google Calendar synchronization)
-    
+
 ### Force Google Calendar synchronization [POST /admin/google-calendar-sync/synchronize/]
 Manually launch the synchronization of the leave requests to the Google calendars of your collaborators.
 
