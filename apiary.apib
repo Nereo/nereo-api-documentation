@@ -92,7 +92,7 @@ Retrieve the Group with the given ID.
     + Attributes (GroupWithMPTT)
     
 ### Update a Group [PATCH]
-Update the Group with the Given ID.
+Update the Group with the Given ID. **Administrators only**.
 
 + Request
     + Attributes (Group)
@@ -101,7 +101,7 @@ Update the Group with the Given ID.
     + Attributes (GroupWithMPTT)
 
 ### Delete a Group [DELETE]
-Delete the Group with the given ID **with all its descendants**.
+Delete the Group with the given ID **with all its descendants**. **Administrators only**.
 
 + Response 204
 
@@ -111,7 +111,7 @@ Delete the Group with the given ID **with all its descendants**.
     + show_in_planning: true (boolean, optional) - Filter the Group showing in the schedule.
 
 ### Create a Group [POST]
-Create a new Group.
+Create a new Group. **Administrators only**.
 
 + Request
     + Attributes (Group)
