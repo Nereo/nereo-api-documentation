@@ -77,6 +77,55 @@ Retrieve all the Users.
         + Include Pagination
         + results (array[User]) - Array of results.
 
+# Group Groups
+Groups allow to organize Users in different services or teams. They are used in the schedule view and allow administrators to perform bulk actions like balance adjustments or exports.
+
+## Group [/new-groups/{id}/]
+
++ Parameters
+    + id: 1 (number) - The ID of the Group.
+
+### Retrieve a Group [GET]
+Retrieve the Group with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (GroupWithMPTT)
+    
+### Update a Group [PATCH]
+Update the Group with the Given ID.
+
++ Request
+    + Attributes (Group)
+    
++ Response 200 (application/json)
+    + Attributes (GroupWithMPTT)
+
+### Delete a Group [DELETE]
+Delete the Group with the given ID **with all its descendants**.
+
++ Response 204
+
+## Group Collection [/new-groups/{?show_in_planning}]
+
++ Parameters
+    + show_in_planning: true (boolean, optional) - Filter the Group showing in the schedule.
+
+### Create a Group [POST]
+Create a new Group.
+
++ Request
+    + Attributes (Group)
+    
++ Response 201 (application/json)
+    + Attributes (GroupWithMPTT)
+    
+### Retrieve all Groups [GET]
+Retrieve all the Groups.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + Include Pagination
+        + results (array[GroupWithMPTT]) - Array of results.
 
 # Group Calendar Layers
 Calendar Layers represent recurring weeks or annual calendars that could be added to a Calendar Profile. They are useful to know when the employee actually works to count correctly the leave.
@@ -648,6 +697,28 @@ Manually launch the synchronization of the leave requests to the Google calendar
 + comment: Interpreted in 2005 by Martin Freeman (string, nullable) - Comment added by an admin about the User.
 + timedAccounts: 1, 2, 3, 4 (array[number]) - List of IDs of Timed Accounts the User is allowed on.
 + calendarProfilePeriods (array[Calendar Profile Period]) - Calendar Profiles of the User.
+
+## Group (object)
+
++ id: 1 (number)
++ created_at: `2017-06-02T13:37:42.000000Z`(string) - Creation date of the Group.
++ updated_at: `2017-06-02T13:37:42.000000Z`(string) - Last update date of the Group.
++ name: `H2G2`(string) - Name of the Group.
++ slug: `h2g2` (string) - Slug of the Group.
++ description: `The Hitchhiker's Guide to the Galaxy` (string) - Description of the Group. **Unused at the moment**.
++ show_in_planning: true (boolean) - Whether or not this Group is displayed in the schedule.
++ parent: 2 (number, nullable) - ID of the parent Group. `null` if this Group is a root.
++ order: 0 (number) - Order of the Group in the list, `0` being the one at the top.
++ managers: 1 (array[number]) - List of IDs of Users managing this Group. **Unused at the moment**.
++ members: 2, 3, 4 (array[number]) - List of IDs of Users belonging to this Group.
+
+## GroupWithMPTT (object)
+
++ Include Group
++ lft: 0 (number) - Value related to the [MPTT structure](https://www.sitepoint.com/hierarchical-data-database-2/). **Read-only**.
++ rght: 0 (number) - Value related to the [MPTT structure](https://www.sitepoint.com/hierarchical-data-database-2/). **Read-only**.
++ level: 0 (number) - Value related to the [MPTT structure](https://www.sitepoint.com/hierarchical-data-database-2/). **Read-only**.
++ tree_id: 0 (number) - Value related to the [MPTT structure](https://www.sitepoint.com/hierarchical-data-database-2/). **Read-only**.
 
 ## Calendar Profile Period (object)
 
