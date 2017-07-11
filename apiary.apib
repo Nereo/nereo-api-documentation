@@ -522,7 +522,7 @@ account has to be provided.
     + Attributes (Leave Request)
     
 # Group Exports
-Specific endpoints that allows you to launch export jobs.
+Specific endpoints that allows you to launch export jobs. As they run as background processes, when the initial call is made, you will get a `process_id`. Thanks to the `status` endpoint, you'll then be able to query the process status and get its result when it's finished.
 
 ## Export status [GET /exports/{process_id}/status/]
 Retrieve the status of an export given the process ID.
