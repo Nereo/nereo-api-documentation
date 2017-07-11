@@ -520,6 +520,40 @@ account has to be provided.
 
 + Response 200 (application/json)
     + Attributes (Leave Request)
+    
+# Group Exports
+Specific endpoints that allows you to launch export jobs.
+
+## Export status [GET /exports/{process_id}/status/]
+Retrieve the status of an export given the process ID.
+
++ Response 200 (application/json)
+    Export is still pending.
+    + Attributes (object)
+        + status: PENDING (string) - Status of the export process.
+        
++ Response 201 (application/json)
+    Export is finished and successful.
+    + Attributes (object)
+        + status: SUCCESS (string) - Status of the export process.
+        + result (object) - Result of the export.
+            + url: `https://cdn.42.com/exports/adent.xlsx` (string) - URL of the exported file.
+
+## Schedule Export [POST /exports/planning/]
+Launch an export of the schedule in Excel format.
+
++ Request
+    + Attributes (Schedule Export)
+    
++ Response 202 (application/json)
+    + Attributes (Launched Export)
+    
+## Users checklist Export [POST /exports/userschecklist/]
+Launch an export of the users checklist in Excel format. Contains information about the configuration of every users: basic information, validators, calendar profiles, allowances and belonging groups.
+**An administrator token is required to access it**.
+
++ Response 202 (application/json)
+    + Attributes (Launched Export)
 
 # Group Administration
 This section details all the administration-related endpoints.
@@ -754,6 +788,20 @@ Manually launch the synchronization of the leave requests to the Google calendar
 ## Free Calendar Date (object)
 
 + dateKey: `2017-08-31` (string) - Date on this Free Calendar.
+
+## Launched Export (object)
+
++ detail: `Export has been launched` (string) - Status message.
++ process_id: `c36693e6-846e-4cfb-b1fc-335b009bd331` (string) - Process ID.
+
+## Schedule Export (object)
+
++ begin_date: `2017-01-01` (string) - Start date of the export.
++ end_date: `2017-12-31` (string) - End date of the export.
++ users: 1, 2, 3, 4 (array[number], optional) - List of IDs of Users you want to export the schedule. Either this field or `group` must be provided.
++ group: 1 (number) - ID of the Group you want to export the schedule. Either this field or `users` must be provided.
++ show_absence_types: true (boolean) - Whether or not to display the absence types on the exported schedule.
++ show_account_initial: false (boolean) - Whether or not to display the first letter of the absence types name in the cells.
 
 ## Google Calendar synchronization (object)
 
