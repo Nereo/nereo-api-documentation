@@ -559,28 +559,23 @@ Launch an export of the users checklist in Excel format. Contains information ab
 This section details all the administration-related endpoints.
 **An administrator token is required to access them**.
 
-## Google Calendar synchronization [/admin/google-calendar-sync/]
-If you use Google G Suite in your company, you can synchronize leave requests between Nereo and the Google calendars of your collaborators: 
-each validated leave requests will automatically be added to their respective calendar.
+## Settings [/admin/settings/]
+Settings of your company on Nereo.
 
-### Get Google Calendar synchronization status [GET]
-Check if Google Calendar synchronization is enabled on your instance and Nereo is allowed to access
-your Google domain.
+### Retrieve settings [GET]
 
 + Response 200 (application/json)
-    + Attributes (Google Calendar synchronization)
+    + Attributes (Settings)
 
-### Update Google Calendar synchronization settings [POST]
-Enable or disable Google Calendar synchronization on your instance.
+### Update settings [POST]
 
 + Request
-    + Attributes (object)
-        + synchronization_enabled: true (boolean) - Whether or not to enable Google Calendar synchronization on your Nereo instance.
+    + Attributes (Settings)
 
 + Response 200 (application/json)
-    + Attributes (Google Calendar synchronization)
+    + Attributes (Settings)
 
-### Force Google Calendar synchronization [POST /admin/google-calendar-sync/synchronize/]
+### Force Google Calendar synchronization [POST /admin/synchronize-google-calendar/]
 Manually launch the synchronization of the leave requests to the Google calendars of your collaborators.
 
 + Response 200 (application/json)
@@ -803,7 +798,10 @@ Manually launch the synchronization of the leave requests to the Google calendar
 + show_absence_types: true (boolean) - Whether or not to display the absence types on the exported schedule.
 + show_account_initial: false (boolean) - Whether or not to display the first letter of the absence types name in the cells.
 
-## Google Calendar synchronization (object)
+## Settings (object)
 
-+ synchronization_enabled: true (boolean) - Whether or not the Google Calendar synchronization is enabled on your Nereo instance.
-+ authorized: true (boolean) - Whether or not Nereo is allowed to access to your Google domain.
++ emails_enabled: true (boolean) - Whether or not the e-mails are sent to the users.
++ show_hidden_absences: false (boolean) - Whether or not the hidden absences are always shown under the calendar and schedule.
++ absences_rules : `O Deep Thought computer, the task we have designed you to perform is this. We want you to tell us.... The Answer.` (string, nullable) - Customizable text to communicate absences rules of the company to the Employees.
++ google_calendar_synchronization_enabled: true (boolean) - Whether or not the Google Calendar synchronization is enabled on your Nereo instance.
++ google_calendar_authorized: true (boolean) - Whether or not Nereo is allowed to access to your Google domain.
